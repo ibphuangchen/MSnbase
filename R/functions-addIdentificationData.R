@@ -87,7 +87,8 @@ filterIdentificationDataFrame <- function(x,
         keep <- tapply(x[, accession],
                        x[, spectrumID],
                        function(xx) length(unique(xx))) == 1
-        x <- x[keep, ]
+        #x <- x[keep, ]
+        x <- x[x[,spectrumID] %in% names(keep)[keep],]
         n3 <- nrow(x)
         if (verbose)
             message(" removed ", n0 - n3, " non-proteotypic peptides")
@@ -198,7 +199,7 @@ filterIdentificationDataFrame <- function(x,
         if (!nrow(fd))
             stop("No feature data found.")
 
-        fd$spectrum.file <- basename(fileNames(object)[fromFile(object)])
+        fd$spectrum.file <- gsub(basename(fileNames(object)[fromFile(object)]), pattern = '\\..*', replacement = '')
         fd$acquisition.number <- acquisitionNum(object)
         
         ####before merging,need to make sure the icol (spectrumFile and acquisitionNum) acquisitionNum is numeric
