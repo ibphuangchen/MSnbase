@@ -200,6 +200,17 @@ filterIdentificationDataFrame <- function(x,
 
         fd$spectrum.file <- basename(fileNames(object)[fromFile(object)])
         fd$acquisition.number <- acquisitionNum(object)
+        
+        ####before merging,need to make sure the icol (spectrumFile and acquisitionNum) acquisitionNum is numeric
+        if(is.character(id[,icol[2]])){
+          numVec = strsplit(id[,icol[2]],split = ';')
+          numVec = sapply(numVec, function(x)x[1])
+          numVec = as.numeric(numVec)
+          id[,icol[2]] = numVec
+        }
+        
+        ###
+        
         fd <- utils.mergeSpectraAndIdentificationData(fd, id,
                                                       fcol = fcol,
                                                       icol = icol,
